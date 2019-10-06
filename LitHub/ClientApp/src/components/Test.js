@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 
-export class Counter extends Component {
-  displayName = Counter.name
+export class Test extends Component {
+    displayName = Test.name
 
   constructor(props) {
-      super(props);
-      this.state = { currentCount: 0 };
-      this.incrementCounter = this.incrementCounter.bind(this);      
+    super(props);
+    this.state = { currentCount: 0 };
+    this.incrementCounter = this.incrementCounter.bind(this);
   }
 
   incrementCounter() {

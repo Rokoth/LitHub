@@ -1,26 +1,78 @@
 import React, { Component } from 'react';
 
 export class Home extends Component {
-  displayName = Home.name
+    displayName = Home.name
+
+    constructor(props) {
+        super(props);
+        this.state = { signed: false, loading: false };        
+        this.get_content = this.get_content.bind(this);
+        this.handleInputChange = this.handleInputChange.bind(this)
+    }
+
+    handleInputChange(event) {
+        const target = event.target;
+        const value = target.type === 'checkbox' ? target.checked : target.value;
+        const name = target.name;
+
+        this.setState({
+            [name]: value
+        });
+    }
+
+    static renderHubTable(hubs) {
+        return (
+            <table className='table'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>DateCreated</th>
+                        <th>Author</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {hubs.map(hub =>
+                        <tr key={hub.number}>
+                            <td>{hub.name}</td>
+                            <td>{hub.dateCreated}</td>
+                            <td>{hub.Author}</td>
+                            <td><a href = "/"><Glyphicon glyph='edit' /></a></td>                           
+                        </tr>
+                    )}
+                </tbody>
+            </table>
+        );
+    }
+
+    get_content() {
+        if (this.state.loading) {
+            return (<div><p><em>Loading...</em></p></div>);
+        }
+        else if (this.state.signed) {
+            return (
+                <div>
+                    
+                </div>);
+        }
+        else {
+            return (
+                <div>
+                    <h1>LitHub WebClient</h1>
+                    <p>Simple tool for art teamwork and version contol.</p>
+                    <p>To get started follow next four steps:</p>
+                    <ul>
+                        <li><a href="/register">Register</a></li>
+                        <li>Create new or fork exists project</li>
+                        <li>Edit project file(s) in editor on PC or browser editor</li>
+                        <li>Save work</li>
+                    </ul>
+                    <p>Profit!</p>
+                </div>);
+        }
+    }
 
   render() {
-    return (
-      <div>
-        <h1>Hello, world!</h1>
-        <p>Welcome to your new single-page application, built with:</p>
-        <ul>
-          <li><a href='https://get.asp.net/'>ASP.NET Core</a> and <a href='https://msdn.microsoft.com/en-us/library/67ef8sbd.aspx'>C#</a> for cross-platform server-side code</li>
-          <li><a href='https://facebook.github.io/react/'>React</a> for client-side code</li>
-          <li><a href='http://getbootstrap.com/'>Bootstrap</a> for layout and styling</li>
-        </ul>
-        <p>To help you get started, we've also set up:</p>
-        <ul>
-          <li><strong>Client-side navigation</strong>. For example, click <em>Counter</em> then <em>Back</em> to return here.</li>
-          <li><strong>Development server integration</strong>. In development mode, the development server from <code>create-react-app</code> runs in the background automatically, so your client-side resources are dynamically built on demand and the page refreshes when you modify any file.</li>
-          <li><strong>Efficient production builds</strong>. In production mode, development-time features are disabled, and your <code>dotnet publish</code> configuration produces minified, efficiently bundled JavaScript files.</li>
-        </ul>
-        <p>The <code>ClientApp</code> subdirectory is a standard React application based on the <code>create-react-app</code> template. If you open a command prompt in that directory, you can run <code>npm</code> commands such as <code>npm test</code> or <code>npm install</code>.</p>
-      </div>
-    );
+      return (this.get_content());  
   }
 }
