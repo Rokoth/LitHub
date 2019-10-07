@@ -7,6 +7,7 @@ import { Counter } from './components/Counter';
 import { Test } from './components/Test';
 import { Register } from './components/Register';
 import { Login } from './components/Login';
+import { Hub } from './components/Hub';
 
 export default class App extends Component {
   displayName = App.name
@@ -20,6 +21,7 @@ export default class App extends Component {
             <Route path='/test' component={Test} />
             <Route path='/register' component={Register} />
             <Route path='/login' component={Login} />
+            <Route path='/hub' component={Hub} />
       </Layout>
     );
   }
