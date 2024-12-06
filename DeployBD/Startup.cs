@@ -1,13 +1,11 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using DeployBD.Options;
+using DeployBD.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 
 namespace DeployBD
 {
@@ -23,7 +21,11 @@ namespace DeployBD
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            //services.AddOptions<IOptions<CommonOptions>>().Configure(s=>s.Value = );
+            services.Configure<CommonOptions>(Configuration.GetSection("CommonOptions"));
             services.AddRazorPages();
+            services.AddScoped<IDeployService, DeployService>();
+            services.AddEntityFrameworkNpgsql();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -39,14 +41,11 @@ namespace DeployBD
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
-
-            app.UseHttpsRedirection();
+            var options = app.ApplicationServices.GetRequiredService<IOptions<CommonOptions>>();
+            //app.UseHttpsRedirection();
             app.UseStaticFiles();
-
             app.UseRouting();
-
             app.UseAuthorization();
-
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();

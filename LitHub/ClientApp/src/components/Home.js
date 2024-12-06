@@ -1,20 +1,58 @@
 import React, { Component } from 'react';
 
 export class Home extends Component {
+
+    static renderHubTable(hubs) {
+        return (
+            <table className='table'>
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>DateModified</th>
+                        <th>Author</th>
+                        <th/>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr key="111">
+                        <td>test</td>
+                        <td>test</td>
+                        <td>test</td>
+                        <td>test</td>
+                    </tr>
+                    {hubs.map(hub => {
+                        <tr key="111">
+                            <td>test</td>
+                            <td>test</td>
+                            <td>test</td>
+                            <td>test</td>
+                        </tr>;
+                    }
+                    )}
+                </tbody>
+            </table>
+        );
+    }
+
     displayName = Home.name
 
     constructor(props) {
         super(props);
-        this.state = { signed: true, loading: true, hubs: [] };        
+        this.state = { signed: true, loading: true, hubs: [] };       
+        //this.getHubs();
+        fetch('api/Hub')
+            .then(response => response.json())
+            .then(data => {
+                this.setState({ hubs: data, loading: false });
+            });
         this.get_content = this.get_content.bind(this);
-        this.handleInputChange = this.handleInputChange.bind(this);
-        this.getHubs();
+        this.handleInputChange = this.handleInputChange.bind(this);        
     }
 
     getHubs() {
         if (this.state.signed) {
             this.setState({ loading: true });
-            this.render();
+            //this.render();
             fetch('api/Hub')
                 .then(response => response.json())
                 .then(data => {
@@ -28,40 +66,14 @@ export class Home extends Component {
         const target = event.target;
         const value = target.type === 'checkbox' ? target.checked : target.value;
         const name = target.name;
-
         this.setState({
             [name]: value
         });
     }
-
-    static renderHubTable(hubs) {
-        return (
-            <table className='table'>
-                <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>DateModified</th>
-                        <th>Author</th>
-                        <th></th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {hubs.map(hub =>
-                        <tr key={hub.id}>
-                            <td>{hub.name}</td>
-                            <td>{hub.dateModified}</td>
-                            <td>{hub.author}</td>
-                            <td><a href={"/hub/?id=" + hub.id }><span class="glyphicon glyphicon-edit" aria-hidden="true"></span></a></td>                           
-                        </tr>
-                    )}
-                </tbody>
-            </table>
-        );
-    }
-
+    
     get_content() {
         if (this.state.loading) {
-            return (<div><p><em>Loading...</em></p></div>);
+            return <div><p><em>Loading...</em></p></div>;
         }
         else if (this.state.signed) {
             return  Home.renderHubTable(this.state.hubs);
@@ -84,6 +96,7 @@ export class Home extends Component {
     }
 
   render() {
-      return (this.get_content());  
+      var ret = this.get_content();  
+      return ret;
   }
 }
